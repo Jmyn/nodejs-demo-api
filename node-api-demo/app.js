@@ -8,6 +8,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var HttpStatus = require('http-status-codes');
 
 var students = require('./routes/students');
 var apis = require('./routes/api');
@@ -33,7 +34,7 @@ app.use('/api/students', students);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
-    err.status = 404;
+    err.status = HttpStatus.NOT_FOUND;
     next(err);
 });
 
@@ -43,22 +44,14 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (process.env.NODE_ENV === 'dev') {
     app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+        res.status(err.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message, error: err });
     });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+    res.status(err.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message, error: {} });
 });
 
 app.set('port', process.env.PORT || 3000);

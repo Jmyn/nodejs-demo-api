@@ -1,21 +1,41 @@
 'use strict';
 const apiService = require('../service/apiService');
-var HttpStatus = require('http-status-codes');
+const HttpStatus = require('http-status-codes');
+const strutil = require('../util/stringUtil');
 
 exports.register = function (req, res) {
-    res.send('register');
+    let teacher = req.body['teacher']; 
+    let students = req.body['students'];
+    if (!teacher || !strutil.isString(teacher) || !students || !Array.isArray(students)) {
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'invalid teacher or students parameter' });
+        return;
+    }
+    (async () => {
+        let result = await apiService.register(students, teacher);
+        if (result.status === HttpStatus.OK) {
+            res.status(HttpStatus.NO_CONTENT).send();
+        } else {
+            res.status(result.status).json({ message: result.message });
+        }
+        
+    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
 }
 
 exports.commonstudents = function (req, res) {
     let teachers = req.query['teacher'];
     if (!teachers) {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'invalid teacher parameter' });
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'invalid teacher parameter' });
         return;
     }
     (async () => {
-        let students = await apiService.commonStudents(teachers);
-        res.status(HttpStatus.OK).json(students);
-    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
+        let result = await apiService.commonStudents(teachers);
+        if (result.status === HttpStatus.OK) {
+            res.status(HttpStatus.OK).json(result.response);
+        } else {
+            res.status(result.status).json({ message: result.message });
+        }
+        
+    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message, error: err }));
     return;
 }
 
