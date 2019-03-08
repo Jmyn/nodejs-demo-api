@@ -12,12 +12,7 @@ exports.register = function (req, res) {
     }
     (async () => {
         let result = await apiService.register(students, teacher);
-        if (result.status === HttpStatus.OK) {
-            res.status(HttpStatus.NO_CONTENT).send();
-        } else {
-            res.status(result.status).json({ message: result.message });
-        }
-        
+        handleApiResult(result, res);
     })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
 }
 
@@ -29,20 +24,38 @@ exports.commonstudents = function (req, res) {
     }
     (async () => {
         let result = await apiService.commonStudents(teachers);
-        if (result.status === HttpStatus.OK) {
-            res.status(HttpStatus.OK).json(result.response);
-        } else {
-            res.status(result.status).json({ message: result.message });
-        }
-        
+        handleApiResult(result, res);
     })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message, error: err }));
     return;
 }
 
 exports.suspend = function (req, res) {
-    res.send('suspend');
+    let personEmail = req.body['student'];
+    if (!personEmail || !strutil.isString(personEmail)) {
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'invalid student parameter' });
+        return;
+    }
+    (async () => {
+        let result = await apiService.suspend(personEmail);
+        handleApiResult(result, res);
+    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
 }
 
 exports.retrievefornotifications = function (req, res) {
     res.send('retrievefornotifications');
+}
+
+var handleApiResult = function(result, res)
+{
+    switch (result.status) {
+        case HttpStatus.OK:
+            res.status(HttpStatus.OK).json(result.response);
+            break;
+        case HttpStatus.NO_CONTENT:
+            res.status(HttpStatus.NO_CONTENT).send();
+            break;
+        default:
+            res.status(result.status).json({ message: result.message });
+            break;
+    }
 }

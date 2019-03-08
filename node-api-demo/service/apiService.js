@@ -3,9 +3,9 @@ const db = require('../config/db');
 const teacherService = require('../service/teacherService');
 const studentService = require('../service/studentService');
 const registryService = require('../service/registryService');
+const suspensionService = require('../service/suspensionService');
 const HttpStatus = require('http-status-codes');
 const ApiResult = require('../model/ApiResult');
-const util = require('util');
 
 const commonStudentSql ='select p.email from student as s left join person as p on p.idperson = s.personid where ';
 const commonStudentExistClause = ' exists (select * from registry as r where r.register_person_from = s.personid and r.register_person_to = ?) ';
@@ -53,7 +53,10 @@ exports.register = async function (fromArray, to) {
         if (!studentPersonid) {
             return new ApiResult(HttpStatus.NOT_FOUND, 'student does not exist: ' + from, {});
         }
-        studentPersonids.push(studentPersonid);
+        let isRegistered = await registryService.isRegistered(studentPersonid, teacherPersonId);
+        if (!isRegistered) {
+            studentPersonids.push(studentPersonid);
+        } 
     }
 
     var chain = db.getPromiseChain();
@@ -67,6 +70,29 @@ exports.register = async function (fromArray, to) {
     for await (const [i, studentPersonid] of studentPersonids.entries()) {
         await registryService.insertRegistry(chain, studentPersonid, teacherPersonId);
     }
-    return new ApiResult(HttpStatus.OK, '', {});
+    return new ApiResult(HttpStatus.NO_CONTENT, '', {});
+}
+
+exports.suspend = async function (email) {
+    let studentPersonId = await studentService.getStudentPersonId(email);
+    if (!studentPersonId) {
+        return new ApiResult(HttpStatus.NOT_FOUND, 'student does not exist: ' + to, {});
+    }
+
+    let isSuspended = await suspensionService.isSuspended(studentPersonId);
+    if (isSuspended) {
+        return new ApiResult(HttpStatus.NO_CONTENT, email + ' is already suspended', {});
+    }
+
+    var chain = db.getPromiseChain();
+    chain.
+        on('rollback', function (err) {
+            console.log('rollback');
+            console.log(err);
+            return new ApiResult(HttpStatus.INTERNAL_SERVER_ERROR, 'db error encountered', {});
+        });
+
+    await suspensionService.insertSuspension(chain, studentPersonId, new Date());
+    return new ApiResult(HttpStatus.NO_CONTENT, '', {});
 }
 

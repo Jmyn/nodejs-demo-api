@@ -8,3 +8,11 @@ exports.insertRegistry = async function (chain, fromId, toId) {
     let result = await chain.query[util.promisify.custom](sql, [fromId, toId]);
     return !result.insertId ? result : result.insertId;
 }
+
+exports.isRegistered = async function (fromId, toId) {
+    let res = await db.pool.query('select idregistry from registry ' +
+        ' where register_person_from = ? and register_person_to = ? ',
+        [fromId, toId]);
+    let notRegistered = !res[0];
+    return !notRegistered;
+}
