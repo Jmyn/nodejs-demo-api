@@ -96,3 +96,44 @@ exports.suspend = async function (email) {
     return new ApiResult(HttpStatus.NO_CONTENT, '', {});
 }
 
+exports.retrievefornotifications = async function (teacher, notification) {
+    const regex = /\B@[a-z0-9_.-]+@[a-z0-9_.-]+/gi;
+    let recipients = new Set();
+    let teacherPersonId = await teacherService.getTeacherPersonId(teacher);
+
+    if (!teacherPersonId) {
+        return new ApiResult(HttpStatus.NOT_FOUND, 'teacher does not exist: ' + to, {});
+    }
+
+    let mentions = notification.match(regex);
+    if (!mentions) {
+        mentions = [];
+    }
+    mentions = mentions.map((s) => s.substr(1));
+    console.log(mentions);
+
+    for await (const [i, email] of mentions.entries()) {
+        let studentPersonid = await studentService.getStudentPersonId(email);
+        if (!studentPersonid) {
+            continue;
+        }
+        let isSuspended = await suspensionService.isSuspended(studentPersonid);
+        if (!isSuspended) {
+            recipients.add(email);
+        }
+    }
+    let persons = await registryService.personsRegisteredTo(teacherPersonId);
+    if (Array.isArray(persons)) {
+        for await (const [i, id] of persons.entries()) {
+            let email = await studentService.getStudentEmail(id);
+            if (!email) {
+                continue;
+            }
+            let isSuspended = await suspensionService.isSuspended(id);
+            if (!isSuspended) {
+                recipients.add(email);
+            }
+        }
+    }
+    return new ApiResult(HttpStatus.OK, '', { recipients: Array.from(recipients) });
+}

@@ -16,3 +16,14 @@ exports.isRegistered = async function (fromId, toId) {
     let notRegistered = !res[0];
     return !notRegistered;
 }
+
+exports.personsRegisteredTo = async function (toPersonId) {
+    let res = await db.pool.query('select register_person_from from registry ' +
+        ' where register_person_to = ? ',
+        [toPersonId]);
+    if (!res[0]) {
+        return null;
+    }
+    res = res.map((x) => x.register_person_from);
+    return res;
+}

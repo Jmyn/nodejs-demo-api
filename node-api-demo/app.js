@@ -9,8 +9,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var HttpStatus = require('http-status-codes');
-
-var students = require('./routes/students');
 var apis = require('./routes/api');
 
 var app = express();
@@ -30,7 +28,6 @@ app.use(cookieParser());
 
 //app.use('/', routes);
 app.use('/api', apis);
-app.use('/api/students', students);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

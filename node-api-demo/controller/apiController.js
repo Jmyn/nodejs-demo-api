@@ -42,7 +42,17 @@ exports.suspend = function (req, res) {
 }
 
 exports.retrievefornotifications = function (req, res) {
-    res.send('retrievefornotifications');
+    let teacher = req.body['teacher'];
+    let notification = req.body['notification'];
+
+    if (!teacher || !strutil.isString(teacher) || !notification || !strutil.isString(notification)) {
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'invalid teacher or notification parameter' });
+        return;
+    }
+    (async () => {
+        let result = await apiService.retrievefornotifications(teacher, notification);
+        handleApiResult(result, res);
+    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
 }
 
 var handleApiResult = function(result, res)

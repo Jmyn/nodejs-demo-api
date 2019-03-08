@@ -10,3 +10,13 @@ exports.getStudentPersonId = async function (studentEmail) {
     }
     return res[0].idperson;
 }
+
+exports.getStudentEmail = async function (personId) {
+    let res = await db.pool.query('select email from person as p ' +
+        'where p.role = (select idperson_role from person_role where role_name = ?) ' +
+        'and p.idperson = ?', ['student', personId]);
+    if (!res[0]) {
+        return null;
+    }
+    return res[0].email;
+}
