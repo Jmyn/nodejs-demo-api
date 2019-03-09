@@ -4,7 +4,8 @@ const util = require('util');
 
 const insertSql = 'INSERT INTO suspension (personid, suspend_startdate) VALUES (?,?);';
 
-exports.insertSuspension = async function (chain, personId, fromDate) {
+exports.insertSuspension = async function (personId, fromDate, chain = null) {
+    if (!chain) chain = db.getPromiseChain();
     let result = await chain.query[util.promisify.custom](insertSql, [personId, fromDate]);
     return !result.insertId ? result : result.insertId;
 }

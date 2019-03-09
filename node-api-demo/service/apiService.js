@@ -68,7 +68,7 @@ exports.register = async function (fromArray, to) {
         });
 
     for await (const [i, studentPersonid] of studentPersonids.entries()) {
-        await registryService.insertRegistry(chain, studentPersonid, teacherPersonId);
+        await registryService.insertRegistry( studentPersonid, teacherPersonId, chain);
     }
     return new ApiResult(HttpStatus.NO_CONTENT, '', {});
 }
@@ -92,7 +92,7 @@ exports.suspend = async function (email) {
             return new ApiResult(HttpStatus.INTERNAL_SERVER_ERROR, 'db error encountered', {});
         });
 
-    await suspensionService.insertSuspension(chain, studentPersonId, new Date());
+    await suspensionService.insertSuspension( studentPersonId, new Date(), chain);
     return new ApiResult(HttpStatus.NO_CONTENT, '', {});
 }
 

@@ -4,9 +4,10 @@ const util = require('util');
 
 const sql = 'INSERT INTO registry (register_person_from, register_person_to) VALUES(?, ?)';
 
-exports.insertRegistry = async function (chain, fromId, toId) {
+exports.insertRegistry = async function (fromId, toId, chain = null) {
+    if (!chain) chain = db.getPromiseChain();
     let result = await chain.query[util.promisify.custom](sql, [fromId, toId]);
-    return !result.insertId ? result : result.insertId;
+    return !result.insertId ? null : result.insertId;
 }
 
 exports.isRegistered = async function (fromId, toId) {

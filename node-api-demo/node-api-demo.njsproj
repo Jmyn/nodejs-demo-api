@@ -31,8 +31,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="config\config.js" />
+    <Compile Include="config\db.js" />
+    <Compile Include="controller\apiController.js" />
+    <Compile Include="model\ApiResult.js" />
+    <Compile Include="routes\api.js" />
     <Compile Include="routes\index.js" />
-    <Compile Include="routes\students.js" />
+    <Compile Include="service\apiService.js" />
+    <Compile Include="service\suspensionService.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="service\registryService.js" />
+    <Compile Include="service\studentService.js" />
+    <Compile Include="service\teacherService.js" />
+    <Compile Include="util\stringUtil.js" />
+    <Content Include=".env" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
@@ -41,11 +54,16 @@
     <Content Include="views\error.pug" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="config\" />
+    <Folder Include="controller\" />
+    <Folder Include="model\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
+    <Folder Include="service\" />
+    <Folder Include="util\" />
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>

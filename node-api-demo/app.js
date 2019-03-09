@@ -10,6 +10,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var HttpStatus = require('http-status-codes');
 var apis = require('./routes/api');
+var student = require('./routes/student');
 
 var app = express();
 
@@ -28,6 +29,8 @@ app.use(cookieParser());
 
 //app.use('/', routes);
 app.use('/api', apis);
+app.use('/student', student);
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -56,3 +59,5 @@ app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
 });
+
+module.exports = app;
