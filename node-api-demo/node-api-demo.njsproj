@@ -5,7 +5,8 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>node-api-demo</Name>
     <RootNamespace>node-api-demo</RootNamespace>
-    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
+    <LastActiveSolutionConfig>Release|Any CPU</LastActiveSolutionConfig>
+    <NameOfLastUsedPublishProfile>node-api-demo20190310023500 - Web Deploy (2)</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -34,9 +35,15 @@
     <Compile Include="config\config.js" />
     <Compile Include="config\db.js" />
     <Compile Include="controller\apiController.js" />
+    <Compile Include="controller\studentController.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="model\ApiResult.js" />
     <Compile Include="routes\api.js" />
     <Compile Include="routes\index.js" />
+    <Compile Include="routes\student.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="service\apiService.js" />
     <Compile Include="service\suspensionService.js">
       <SubType>Code</SubType>
@@ -44,8 +51,13 @@
     <Compile Include="service\registryService.js" />
     <Compile Include="service\studentService.js" />
     <Compile Include="service\teacherService.js" />
+    <Compile Include="test\test.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="util\stringUtil.js" />
     <Content Include=".env" />
+    <None Include="node-api-demo20190310023500 - Web Deploy.pubxml" />
+    <None Include="node-api-demo20190310023500 - Web Deploy %282%29.pubxml" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
@@ -57,6 +69,7 @@
     <Folder Include="config\" />
     <Folder Include="controller\" />
     <Folder Include="model\" />
+    <Folder Include="test\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />

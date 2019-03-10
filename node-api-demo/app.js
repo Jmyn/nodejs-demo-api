@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var HttpStatus = require('http-status-codes');
 var apis = require('./routes/api');
 var student = require('./routes/student');
+var teacher = require('./routes/teacher');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use(cookieParser());
 //app.use('/', routes);
 app.use('/api', apis);
 app.use('/student', student);
+app.use('/teacher', teacher);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

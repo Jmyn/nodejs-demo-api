@@ -50,6 +50,19 @@ var getPromiseChain = function () {
                 });
         });
     };
+
+    //chain.commit[util.promisify.custom] = () => {
+    //    return new Promise((resolve, reject) => {
+    //        chain.commit().
+    //            on('commit', function (result) {
+    //                console.log('commit');
+    //                resolve(result);
+    //            }).
+    //            on('rollback', function (err) {
+    //                reject(err);
+    //            });
+    //    });
+    //};
     return chain;
 }
 module.exports.pool = pool;

@@ -45,7 +45,7 @@ exports.register = async function (fromArray, to) {
     let teacherPersonId = await teacherService.getTeacherPersonId(to);
 
     if (!teacherPersonId) {
-        return new ApiResult(HttpStatus.NOT_FOUND, 'teacher does not exist: ' + to, {});
+        return new ApiResult(HttpStatus.NOT_FOUND, 'Teacher does not exist: ' + to, {});
     }
 
     for await (const [i, from] of fromArray.entries()) {
@@ -76,7 +76,7 @@ exports.register = async function (fromArray, to) {
 exports.suspend = async function (email) {
     let studentPersonId = await studentService.getStudentPersonId(email);
     if (!studentPersonId) {
-        return new ApiResult(HttpStatus.NOT_FOUND, 'student does not exist: ' + to, {});
+        return new ApiResult(HttpStatus.NOT_FOUND, 'student does not exist: ' + email , {});
     }
 
     let isSuspended = await suspensionService.isSuspended(studentPersonId);
@@ -102,7 +102,7 @@ exports.retrievefornotifications = async function (teacher, notification) {
     let teacherPersonId = await teacherService.getTeacherPersonId(teacher);
 
     if (!teacherPersonId) {
-        return new ApiResult(HttpStatus.NOT_FOUND, 'teacher does not exist: ' + to, {});
+        return new ApiResult(HttpStatus.NOT_FOUND, 'teacher does not exist: ' + teacher, {});
     }
 
     let mentions = notification.match(regex);
@@ -110,6 +110,7 @@ exports.retrievefornotifications = async function (teacher, notification) {
         mentions = [];
     }
     mentions = mentions.map((s) => s.substr(1));
+    console.log('Mentions: ');
     console.log(mentions);
 
     for await (const [i, email] of mentions.entries()) {

@@ -24,7 +24,7 @@
     "serve-favicon": "^2.3.0"
   },
   "engines": {
-    "node": "~6.10.x"
+    "node": "10.15.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",

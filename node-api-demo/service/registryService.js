@@ -10,6 +10,24 @@ exports.insertRegistry = async function (fromId, toId, chain = null) {
     return !result.insertId ? null : result.insertId;
 }
 
+exports.registerWithEmail = async function (from, to, chain = null) {
+    if (!chain) chain = db.getPromiseChain();
+    let result1 = await chain.query[util.promisify.custom]('select idperson from person where email = ?', [from]);
+    let fromId = result1 ? result1.idperson : 0;
+    if (!fromId) {
+        console.log('invalid from');
+        return null;
+    }
+    let result2 = await chain.query[util.promisify.custom]('select idperson from person where email = ?', [to]);
+    let toId = result2 ? result2.idperson : 0;
+    if (!toId) {
+        console.log('invalid to : ' + to);
+        return null;
+    }
+    let result = await chain.query[util.promisify.custom](sql, [fromId, toId]);
+    return !result.insertId ? null : result.insertId;
+}
+
 exports.isRegistered = async function (fromId, toId) {
     let res = await db.pool.query('select idregistry from registry ' +
         ' where register_person_from = ? and register_person_to = ? ',
