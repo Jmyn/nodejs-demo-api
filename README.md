@@ -1,4 +1,8 @@
-# node-api-demo
+﻿# node-api-demo
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
@@ -16,14 +20,13 @@ git clone https://github.com/Jmyn/nodejs-demo-api.git
 
 Install dependencies. 
 In the directory \nodejs-demo-api\node-api-demo where package.json is located
-
 ```
 npm -install
 ```
 
-Run the init.sql script in \nodejs-demo-api\sql to init the required tables
-
-Start the server
+* Run the init.sql script in \nodejs-demo-api\sql to init the required tables
+* Change db credentials DB_USER and DB_PASS in .env in \nodejs-demo-api\node-api-demo
+* Start the server
 ```
 npm start
 ```
