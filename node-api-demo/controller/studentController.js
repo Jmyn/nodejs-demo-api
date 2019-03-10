@@ -22,10 +22,7 @@ exports.insertStudent = function (req, res) {
 exports.deleteStudent = function (req, res) {
     let email = req.params['email'];
     if (!email) {
-        (async () => {
-            let result = await studentService.deleteStudent();
-            res.status(HttpStatus.OK).json({ message: 'affectedRow: ' + result });
-        })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
+        res.status(HttpStatus.BAD_REQUEST).send();
     } else {
         (async () => {
             let result = await studentService.deleteStudent(email);
