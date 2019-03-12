@@ -1,5 +1,9 @@
 ﻿# node-api-demo
 
+### Public host link
+
+Test the api at https://nodejs-demo-jmyn.herokuapp.com
+
 ### Prerequisites
 
 * [Node v10.15.2 and npm](https://nodejs.org/en/download/)
