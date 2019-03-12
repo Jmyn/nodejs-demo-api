@@ -9,6 +9,8 @@ router.get('/commonstudents', apiController.commonstudents);
 
 router.post('/suspend', apiController.suspend);
 
+router.get('/suspend', apiController.getSuspensions);
+
 router.post('/retrievefornotifications', apiController.retrievefornotifications);
 
 module.exports = router;

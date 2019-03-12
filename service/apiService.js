@@ -6,6 +6,7 @@ const registryService = require('../service/registryService');
 const suspensionService = require('../service/suspensionService');
 const HttpStatus = require('http-status-codes');
 const ApiResult = require('../model/ApiResult');
+const personService = require('../service/personService');
 
 const commonStudentSql ='select p.email from student as s left join person as p on p.idperson = s.personid where ';
 const commonStudentExistClause = ' exists (select * from registry as r where r.register_person_from = s.personid and r.register_person_to = ?) ';
@@ -94,6 +95,16 @@ exports.suspend = async function (email) {
 
     await suspensionService.insertSuspension( studentPersonId, new Date(), chain);
     return new ApiResult(HttpStatus.NO_CONTENT, '', {});
+}
+
+exports.getSuspensions = async function () {
+    let ids = await suspensionService.getSuspensions();
+    let suspensions = [];
+    for await (const [i, id] of ids.entries()) {
+        let email = await personService.getPersonEmail(id);
+        suspensions.push(email);
+    }
+    return new ApiResult(HttpStatus.OK, '', { suspended: suspensions});
 }
 
 exports.retrievefornotifications = async function (teacher, notification) {

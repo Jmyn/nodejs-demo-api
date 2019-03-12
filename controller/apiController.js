@@ -41,6 +41,13 @@ exports.suspend = function (req, res) {
     })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
 }
 
+exports.getSuspensions = function (req, res) {
+    (async () => {
+        let result = await apiService.getSuspensions();
+        handleApiResult(result, res);
+    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
+}
+
 exports.retrievefornotifications = function (req, res) {
     let teacher = req.body['teacher'];
     let notification = req.body['notification'];

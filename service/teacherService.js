@@ -12,6 +12,17 @@ exports.getTeacherPersonId = async function (teacherEmail) {
     return res[0].idperson;
 }
 
+exports.getTeacherEmails = async function () {
+    let res = await db.pool.query('select email from person as p ' +
+        'where p.role = (select idperson_role from person_role where role_name = ?) ', ['teacher']);
+    if (!res) {
+        return null;
+    }
+    let teachers = [];
+    res.forEach((row) => teachers.push(row.email));
+    return teachers;
+}
+
 exports.addTeacher = async function (teacherEmail, chain = null) {
     if (!chain) chain = db.getPromiseChain();
 

@@ -30,3 +30,10 @@ exports.deleteStudent = function (req, res) {
         })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
     }
 }
+
+exports.getStudents = function (req, res) {
+    (async () => {
+        let result = await studentService.getStudentEmails();
+        res.status(HttpStatus.OK).json({ students: result });
+    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
+}

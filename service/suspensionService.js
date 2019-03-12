@@ -17,3 +17,14 @@ exports.isSuspended = async function (personId) {
     let notSuspended = !res[0];
     return !notSuspended;
 }
+
+exports.getSuspensions = async function () {
+    let res = await db.pool.query('select personid from suspension ' +
+        ' where suspend_enddate is null ');
+    if (!res) {
+        return null;
+    }
+    let ids = [];
+    res.forEach((row) => ids.push(row.personid));
+    return ids;
+}

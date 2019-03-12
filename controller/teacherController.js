@@ -30,3 +30,10 @@ exports.deleteTeacher = function (req, res) {
         })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
     }
 }
+
+exports.getTeachers = function (req, res) {
+    (async () => {
+        let result = await teacherService.getTeacherEmails();
+        res.status(HttpStatus.OK).json({ teachers: result });
+    })().catch((err) => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: String(err) }));
+}
