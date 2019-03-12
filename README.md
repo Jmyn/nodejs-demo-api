@@ -43,6 +43,18 @@ npm test
 
 Additional convenience endpoints:
 
+### Get student list
+* Endpoint: `GET /student`
+* Success response status: HTTP 200
+
+### Get teacher list
+* Endpoint: `GET /teacher`
+* Success response status: HTTP 200
+
+### Get suspension list
+* Endpoint: `GET /api/suspend`
+* Success response status: HTTP 200
+
 ### Add student
 * Endpoint: `POST /student`
 * Headers: `Content-Type: application/json`
